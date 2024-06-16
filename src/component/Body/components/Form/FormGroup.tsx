@@ -22,7 +22,7 @@ const FormGroup = (props: FormProps) => {
   const [id, setId] = useState<number>(0);
   const [isErr, setIsErr] = useState<boolean>(false);
   const boxData = useSelector((state) => state.completed.data);
-
+  
   const dispatch = useDispatch();
 
   const addBoxes = (data: string) => {
