@@ -7,6 +7,8 @@ import {
   addData,
   removeData,
 } from "../../../../features/completed/completeSlice";
+import { getDTR, postDTR } from "../../../../api";
+// import Loader from "../../../Loader";
 interface FormProps {
   title: string;
   placeholder: string;
@@ -22,25 +24,35 @@ const FormGroup = (props: FormProps) => {
   const [id, setId] = useState<number>(0);
   const [isErr, setIsErr] = useState<boolean>(false);
   const boxData = useSelector((state) => state.completed.data);
-  
   const dispatch = useDispatch();
 
-  const addBoxes = (data: string) => {
+  // const getDTRData = async () => {
+  //   try{
+  //     const res = await getDTR('/DTR'); 
+  //     console.log(res)
+  //     // setBoxes(res.filter)
+  //   }catch(err){
+  //     console.log(err)
+  //   }
+  // };
+
+  const addBoxes = async (data: string) => {
     if (!data) {
       setIsErr(true);
       return;
     }
-    setId(id + 1);
-    console.log(id);
-    dispatch(addData({ id: id, data, group: props.group }));
-    setInputVal("");
+    const res = await postDTR("/DTR", {
+      description: data,
+      status: props.group,
+    });
     setIsErr(false);
   };
+
   const removeBox = (sheesh: number) => {
     const params = {
-      id: sheesh, 
-      group: props.group
-    }
+      id: sheesh,
+      group: props.group,
+    };
     dispatch(removeData(params));
   };
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -58,7 +70,10 @@ const FormGroup = (props: FormProps) => {
     );
   });
   useEffect(() => {
-    console.log(boxData)
+    // getDTRData()
+  },[]);
+  useEffect(() => {
+    console.log(boxData);
     setBoxes(boxData.filter((item) => item.group == props.group));
   }, [boxData]);
   return (
