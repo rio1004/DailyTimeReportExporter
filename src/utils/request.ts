@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const requestInstance = axios.create({
-  baseURL: "http://localhost:4000/",
+  baseURL: "https://dtr-be.vercel.app/",
   timeout: 10000,
 });
 
