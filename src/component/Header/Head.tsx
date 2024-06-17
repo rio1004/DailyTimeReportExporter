@@ -1,34 +1,39 @@
 import "./Head.scss";
 import * as ExcelJS from "exceljs";
 import { getDTR } from "../../api";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AxiosResponse } from "axios";
+import Loader from "../Loader";
 const Head = () => {
   const [dtr, setDtr] = useState<any[]>([]);
   const [complete, setComplete] = useState<any[]>([]);
   const [ongoing, setOngoing] = useState<any[]>([]);
   const [problems, setProblems] = useState<any[]>([]);
-  const getDTRData = async () => {
+  const [loading, setLoading] = useState<boolean>(false);
+  
+  const getDTRData = useCallback(async () => {
     try {
-      const res: AxiosResponse<any> = await getDTR("/DTR");
-      setDtr(res);
-      console.log(dtr, "shithappens");
-    } catch (er) {
-      console.log(er);
+      const res = await getDTR('/DTR');
+      setDtr(res); // Assuming res.data is the data you want to set
+      console.log(res, "shithappens"); // Logging the response data
+    } catch (error) {
+      console.error('Error fetching DTR:', error);
     }
-  };
-  useEffect(() => {
-    getDTRData();
-  }, []);
-  useEffect(() => {
-    const completedData = dtr.filter((item) => item.status == "completed");
-    setComplete(completedData)
-    const ongoingData = dtr.filter((item) => item.status == "ongoing");
-    setOngoing(ongoingData)
-    const problemsData = dtr.filter((item) => item.status == "problems");
-    setProblems(problemsData)
-  }, [dtr]);
+  }, []); // Empty dependency array ensures this function is only created once
 
+  useEffect(() => {
+    getDTRData(); // Call getDTRData() when component mounts
+  }, [getDTRData]); 
+
+  useEffect(() => {
+    console.log(dtr);
+    const completedData = dtr.filter((item) => item.status == "completed");
+    setComplete(completedData);
+    const ongoingData = dtr.filter((item) => item.status == "ongoing");
+    setOngoing(ongoingData);
+    const problemsData = dtr.filter((item) => item.status == "problems");
+    setProblems(problemsData);
+  }, [dtr]);
 
   if (complete.length == 0) {
     complete.push({ description: "   " });
@@ -40,6 +45,7 @@ const Head = () => {
     problems.push({ description: "   " });
   }
   const exportFile = async () => {
+    setLoading(true);
     console.log(complete, "completeShit");
     console.log(ongoing, "ongoingShit");
     console.log(problems, "problemsShit");
@@ -213,8 +219,10 @@ const Head = () => {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
+      setLoading(false);
     } catch (err) {
       console.log(err);
+      setLoading(false);
     }
   };
 
@@ -225,7 +233,9 @@ const Head = () => {
         <p>Jun 5, 2024</p>
       </div>
       <div className="export-btn">
-        <button onClick={exportFile}>Export</button>
+        <button onClick={exportFile}>
+          {!loading ? <p>Export</p> : <Loader />}
+        </button>
       </div>
     </div>
   );
