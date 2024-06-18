@@ -2,11 +2,7 @@ import { CiSquarePlus } from "react-icons/ci";
 import Box from "../Box/Box";
 import { ChangeEvent, useEffect, useState } from "react";
 import "./FormGroup.scss";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  addData,
-  removeData,
-} from "../../../../features/completed/completeSlice";
+
 import { getDTR, postDTR } from "../../../../api";
 // import Loader from "../../../Loader";
 interface FormProps {
@@ -20,22 +16,24 @@ interface boxObjecs {
 }
 const FormGroup = (props: FormProps) => {
   const [boxes, setBoxes] = useState<boxObjecs[]>([]);
+  const [boxItems, setBoxItems] = useState([]);
   const [inputVal, setInputVal] = useState<string>("");
   const [id, setId] = useState<number>(0);
   const [isErr, setIsErr] = useState<boolean>(false);
-  const boxData = useSelector((state) => state.completed.data);
-  const dispatch = useDispatch();
+  const [loadData, setLoadData] = useState<boolean>(false);
 
-  // const getDTRData = async () => {
-  //   try{
-  //     const res = await getDTR('/DTR'); 
-  //     console.log(res)
-  //     // setBoxes(res.filter)
-  //   }catch(err){
-  //     console.log(err)
-  //   }
-  // };
-
+  const getDTRData = async () => {
+    setLoadData(true);
+    try {
+      const res = await getDTR("/DTR");
+      console.log(res);
+      setBoxes(res.filter((item) => item.status == props.group));
+      setLoadData(false);
+    } catch (err) {
+      console.log(err);
+      setLoadData(false);
+    }
+  };
   const addBoxes = async (data: string) => {
     if (!data) {
       setIsErr(true);
@@ -45,21 +43,21 @@ const FormGroup = (props: FormProps) => {
       description: data,
       status: props.group,
     });
+    getDTRData();
     setIsErr(false);
   };
-
   const removeBox = (sheesh: number) => {
     const params = {
       id: sheesh,
       group: props.group,
     };
-    dispatch(removeData(params));
   };
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setInputVal(event.target.value);
   };
+
   const BoxItems = boxes.map((item) => {
-    const title = item.data;
+    const title = item.description;
     return (
       <Box
         title={title}
@@ -70,12 +68,8 @@ const FormGroup = (props: FormProps) => {
     );
   });
   useEffect(() => {
-    // getDTRData()
-  },[]);
-  useEffect(() => {
-    console.log(boxData);
-    setBoxes(boxData.filter((item) => item.group == props.group));
-  }, [boxData]);
+    getDTRData();
+  }, []);
   return (
     <div className="form-group">
       <p>
@@ -101,5 +95,4 @@ const FormGroup = (props: FormProps) => {
     </div>
   );
 };
-
 export default FormGroup;

@@ -2,7 +2,6 @@ import "./Head.scss";
 import * as ExcelJS from "exceljs";
 import { getDTR } from "../../api";
 import { useCallback, useEffect, useState } from "react";
-import { AxiosResponse } from "axios";
 import Loader from "../Loader";
 const Head = () => {
   const [dtr, setDtr] = useState<any[]>([]);
@@ -14,16 +13,14 @@ const Head = () => {
   const getDTRData = useCallback(async () => {
     try {
       const res = await getDTR('/DTR');
-      setDtr(res); // Assuming res.data is the data you want to set
-      console.log(res, "shithappens"); // Logging the response data
+      setDtr(res); 
     } catch (error) {
       console.error('Error fetching DTR:', error);
     }
-  }, []); // Empty dependency array ensures this function is only created once
-
+  }, []);
   useEffect(() => {
-    getDTRData(); // Call getDTRData() when component mounts
-  }, [getDTRData]); 
+    getDTRData();
+  }, []); 
 
   useEffect(() => {
     console.log(dtr);
