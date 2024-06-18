@@ -3,23 +3,19 @@ import * as ExcelJS from "exceljs";
 import { getDTR } from "../../api";
 import { useCallback, useEffect, useState } from "react";
 import Loader from "../Loader";
+import { addData } from "../../features/completed/completeSlice";
+import { useDispatch } from "react-redux";
+import { useGlobalFunction } from "../../context/getDTRContext";
 const Head = () => {
   const [dtr, setDtr] = useState<any[]>([]);
   const [complete, setComplete] = useState<any[]>([]);
   const [ongoing, setOngoing] = useState<any[]>([]);
   const [problems, setProblems] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  
-  const getDTRData = useCallback(async () => {
-    try {
-      const res = await getDTR('/DTR');
-      setDtr(res); 
-    } catch (error) {
-      console.error('Error fetching DTR:', error);
-    }
-  }, []);
+  const {myGlobalFunction} = useGlobalFunction();
+
   useEffect(() => {
-    getDTRData();
+    myGlobalFunction();
   }, []); 
 
   useEffect(() => {

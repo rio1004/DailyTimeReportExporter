@@ -4,6 +4,8 @@ import { ChangeEvent, useEffect, useState } from "react";
 import "./FormGroup.scss";
 
 import { getDTR, postDTR } from "../../../../api";
+import { useSelector } from "react-redux";
+import { useGlobalFunction } from "../../../../context/getDTRContext";
 // import Loader from "../../../Loader";
 interface FormProps {
   title: string;
@@ -21,19 +23,10 @@ const FormGroup = (props: FormProps) => {
   const [id, setId] = useState<number>(0);
   const [isErr, setIsErr] = useState<boolean>(false);
   const [loadData, setLoadData] = useState<boolean>(false);
+  const {myGlobalFunction} = useGlobalFunction();
 
-  const getDTRData = async () => {
-    setLoadData(true);
-    try {
-      const res = await getDTR("/DTR");
-      console.log(res);
-      setBoxes(res.filter((item) => item.status == props.group));
-      setLoadData(false);
-    } catch (err) {
-      console.log(err);
-      setLoadData(false);
-    }
-  };
+  const storeData = useSelector(state => state.completed.data);
+  const boxData = storeData.filter(item=> item.status == props.group)
   const addBoxes = async (data: string) => {
     if (!data) {
       setIsErr(true);
@@ -43,20 +36,16 @@ const FormGroup = (props: FormProps) => {
       description: data,
       status: props.group,
     });
-    getDTRData();
+    myGlobalFunction();
     setIsErr(false);
   };
   const removeBox = (sheesh: number) => {
-    const params = {
-      id: sheesh,
-      group: props.group,
-    };
+   
   };
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setInputVal(event.target.value);
   };
-
-  const BoxItems = boxes.map((item) => {
+  const BoxItems = boxData.map((item) => {
     const title = item.description;
     return (
       <Box
@@ -67,9 +56,6 @@ const FormGroup = (props: FormProps) => {
       />
     );
   });
-  useEffect(() => {
-    getDTRData();
-  }, []);
   return (
     <div className="form-group">
       <p>
