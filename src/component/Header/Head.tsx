@@ -1,24 +1,47 @@
-import { useSelector } from "react-redux";
 import "./Head.scss";
 import * as ExcelJS from "exceljs";
+import { getDTR } from "../../api";
+import { useCallback, useEffect, useState } from "react";
+import Loader from "../Loader";
+import { addData } from "../../features/completed/completeSlice";
+import { useDispatch } from "react-redux";
+import { useGlobalFunction } from "../../context/getDTRContext";
 const Head = () => {
-  const data = useSelector((state) => state.completed.data);
-  const completedData = data.filter((item) => item.group == "completed");
-  const ongoingData = data.filter((item) => item.group == "ongoing");
-  const problemsData = data.filter((item) => item.group == "problems");
-  if (completedData.length == 0) {
-    completedData.push({ data: "   " });
+  const [dtr, setDtr] = useState<any[]>([]);
+  const [complete, setComplete] = useState<any[]>([]);
+  const [ongoing, setOngoing] = useState<any[]>([]);
+  const [problems, setProblems] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const {myGlobalFunction} = useGlobalFunction();
+
+  useEffect(() => {
+    myGlobalFunction();
+  }, []); 
+
+  useEffect(() => {
+    console.log(dtr);
+    const completedData = dtr.filter((item) => item.status == "completed");
+    setComplete(completedData);
+    const ongoingData = dtr.filter((item) => item.status == "ongoing");
+    setOngoing(ongoingData);
+    const problemsData = dtr.filter((item) => item.status == "problems");
+    setProblems(problemsData);
+  }, [dtr]);
+
+  if (complete.length == 0) {
+    complete.push({ description: "   " });
   }
-  if (ongoingData.length == 0) {
-    ongoingData.push({ data: "   " });
+  if (ongoing.length == 0) {
+    ongoing.push({ description: "   " });
   }
-  if (problemsData.length == 0) {
-    problemsData.push({ data: "   " });
+  if (problems.length == 0) {
+    problems.push({ description: "   " });
   }
   const exportFile = async () => {
-    console.log(completedData, "completeShit");
-    console.log(ongoingData, "ongoingShit");
-    console.log(problemsData, "problemsShit");
+    setLoading(true);
+    console.log(complete, "completeShit");
+    console.log(ongoing, "ongoingShit");
+    console.log(problems, "problemsShit");
     try {
       const workbook = new ExcelJS.Workbook();
       const templateUrl = "./exceltemplate.xlsx";
@@ -46,7 +69,7 @@ const Head = () => {
       let completeInitialNumb: number = 9;
       const merges = worksheet.model.merges;
 
-      completedData.forEach((item, index) => {
+      complete.forEach((item, index) => {
         const cellComplete = worksheet?.getCell("B" + completeInitialNumb);
         const cellA = worksheet?.getCell("A" + completeInitialNumb);
         const cellH = worksheet?.getCell("H" + completeInitialNumb);
@@ -57,7 +80,7 @@ const Head = () => {
           cellH.style = grayStyle;
         }
         if (cellComplete) {
-          cellComplete.value = index + 1 + "." + item.data;
+          cellComplete.value = index + 1 + "." + item.description;
           cellComplete.style = initialStyle;
           const isAlreadyMerged = merges.some(
             (range) =>
@@ -99,7 +122,7 @@ const Head = () => {
 
       let OngoingInitialData: number = completeInitialNumb + 2;
 
-      ongoingData.forEach((item, index) => {
+      ongoing.forEach((item, index) => {
         const cellComplete = worksheet?.getCell("B" + OngoingInitialData);
         const cellA = worksheet?.getCell("A" + OngoingInitialData);
         const cellH = worksheet?.getCell("H" + OngoingInitialData);
@@ -110,7 +133,7 @@ const Head = () => {
           cellH.style = grayStyle;
         }
         if (cellComplete) {
-          cellComplete.value = index + 1 + "." + item.data;
+          cellComplete.value = index + 1 + "." + item.description;
           cellComplete.style = initialStyle;
           const isAlreadyMerged = merges.some(
             (range) =>
@@ -151,7 +174,7 @@ const Head = () => {
           "Dealing with ongoing tasks has problems encountered, solutions, and how long it can be handled";
       }
       let problemsInitialData: number = OngoingInitialData + 2;
-      problemsData.forEach((item, index) => {
+      problems.forEach((item, index) => {
         const cellComplete = worksheet?.getCell("B" + problemsInitialData);
         const cellA = worksheet?.getCell("A" + problemsInitialData);
         const cellH = worksheet?.getCell("H" + problemsInitialData);
@@ -162,7 +185,7 @@ const Head = () => {
           cellH.style = grayStyle;
         }
         if (cellComplete) {
-          cellComplete.value = index + 1 + "." + item.data;
+          cellComplete.value = index + 1 + "." + item.description;
           cellComplete.style = initialStyle;
           const isAlreadyMerged = merges.some(
             (range) =>
@@ -189,8 +212,10 @@ const Head = () => {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
+      setLoading(false);
     } catch (err) {
       console.log(err);
+      setLoading(false);
     }
   };
 
@@ -201,7 +226,9 @@ const Head = () => {
         <p>Jun 5, 2024</p>
       </div>
       <div className="export-btn">
-        <button onClick={exportFile}>Export</button>
+        <button onClick={exportFile}>
+          {!loading ? <p>Export</p> : <Loader />}
+        </button>
       </div>
     </div>
   );

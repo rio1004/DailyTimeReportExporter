@@ -16,3 +16,4 @@ dist/
 
 # Logs
 *.log
+package-lock.json

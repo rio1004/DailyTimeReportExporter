@@ -2,11 +2,11 @@ import { CiSquarePlus } from "react-icons/ci";
 import Box from "../Box/Box";
 import { ChangeEvent, useEffect, useState } from "react";
 import "./FormGroup.scss";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  addData,
-  removeData,
-} from "../../../../features/completed/completeSlice";
+
+import { deleteDTR, getDTR, postDTR } from "../../../../api";
+import { useSelector } from "react-redux";
+import { useGlobalFunction } from "../../../../context/getDTRContext";
+// import Loader from "../../../Loader";
 interface FormProps {
   title: string;
   placeholder: string;
@@ -18,49 +18,44 @@ interface boxObjecs {
 }
 const FormGroup = (props: FormProps) => {
   const [boxes, setBoxes] = useState<boxObjecs[]>([]);
+  const [boxItems, setBoxItems] = useState([]);
   const [inputVal, setInputVal] = useState<string>("");
   const [id, setId] = useState<number>(0);
   const [isErr, setIsErr] = useState<boolean>(false);
-  const boxData = useSelector((state) => state.completed.data);
-
-  const dispatch = useDispatch();
-
-  const addBoxes = (data: string) => {
+  const [loadData, setLoadData] = useState<boolean>(false);
+  const {myGlobalFunction} = useGlobalFunction();
+  const storeData = useSelector(state => state.completed.data);
+  const boxData = storeData.filter(item=> item.status == props.group)
+  const addBoxes = async (data: string) => {
     if (!data) {
       setIsErr(true);
       return;
     }
-    setId(id + 1);
-    console.log(id);
-    dispatch(addData({ id: id, data, group: props.group }));
-    setInputVal("");
+    const res = await postDTR("/DTR", {
+      description: data,
+      status: props.group,
+    });
+    myGlobalFunction();
     setIsErr(false);
   };
-  const removeBox = (sheesh: number) => {
-    const params = {
-      id: sheesh, 
-      group: props.group
-    }
-    dispatch(removeData(params));
+  const removeBox = async (sheesh: number) => {
+    const res = await deleteDTR(sheesh);
+    myGlobalFunction()
   };
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setInputVal(event.target.value);
   };
-  const BoxItems = boxes.map((item) => {
-    const title = item.data;
+  const BoxItems = boxData.map((item) => {
+    const title = item.description;
     return (
       <Box
         title={title}
-        id={item.id}
+        id={item._id}
         deleteBoxChild={removeBox}
         key={item.id}
       />
     );
   });
-  useEffect(() => {
-    console.log(boxData)
-    setBoxes(boxData.filter((item) => item.group == props.group));
-  }, [boxData]);
   return (
     <div className="form-group">
       <p>
@@ -86,5 +81,4 @@ const FormGroup = (props: FormProps) => {
     </div>
   );
 };
-
 export default FormGroup;
