@@ -1,23 +1,18 @@
 import "./Head.scss";
 import * as ExcelJS from "exceljs";
-import { getDTR } from "../../api";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Loader from "../Loader";
-import { addData } from "../../features/completed/completeSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useGlobalFunction } from "../../context/getDTRContext";
 const Head = () => {
-
   const [complete, setComplete] = useState<any[]>([]);
   const [ongoing, setOngoing] = useState<any[]>([]);
   const [problems, setProblems] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const {myGlobalFunction} = useGlobalFunction();
   const dtr = useSelector(state => state.completed.data);
-
   useEffect(() => {
     myGlobalFunction();
- 
   }, []); 
 
   useEffect(() => {

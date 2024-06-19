@@ -17,12 +17,8 @@ interface boxObjecs {
   data: string;
 }
 const FormGroup = (props: FormProps) => {
-  const [boxes, setBoxes] = useState<boxObjecs[]>([]);
-  const [boxItems, setBoxItems] = useState([]);
   const [inputVal, setInputVal] = useState<string>("");
-  const [id, setId] = useState<number>(0);
   const [isErr, setIsErr] = useState<boolean>(false);
-  const [loadData, setLoadData] = useState<boolean>(false);
   const {myGlobalFunction} = useGlobalFunction();
   const storeData = useSelector(state => state.completed.data);
   const boxData = storeData.filter(item=> item.status == props.group)
@@ -34,6 +30,7 @@ const FormGroup = (props: FormProps) => {
     const res = await postDTR("/DTR", {
       description: data,
       status: props.group,
+      userId: localStorage.getItem('id')
     });
     myGlobalFunction();
     setIsErr(false);

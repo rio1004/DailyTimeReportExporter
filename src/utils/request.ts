@@ -7,7 +7,17 @@ const requestInstance = axios.create({
 
 requestInstance.interceptors.request.use(
   (config) => {
+    const token = localStorage.getItem('token')
+    if(token){
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     console.log("Request Sent:", config);
+    if (config.method === 'get') {
+      // Add additional query parameters to the URL
+      config.params = {
+        userId: localStorage.getItem('id')
+      };
+    }
     return config;
   },
   (error) => {
