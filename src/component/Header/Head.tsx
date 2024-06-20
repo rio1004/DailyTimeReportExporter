@@ -10,11 +10,14 @@ const Head = () => {
   const [ongoing, setOngoing] = useState<any[]>([]);
   const [problems, setProblems] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [date, setDate] = useState<string>(); 
   const { myGlobalFunction } = useGlobalFunction();
   const dtr = useSelector((state) => state.completed.data);
   const navigate = useNavigate(); 
+  const dateNow = new Date().toLocaleDateString("en-US")
   useEffect(() => {
     const id = localStorage.getItem('id')
+    setDate(dateNow)
     myGlobalFunction(id);
   }, []);
 
@@ -229,10 +232,10 @@ const Head = () => {
     <div className="head">
       <div className="head-title">
         <h1>Daily Report Exporter</h1>
-        <p>Jun 5, 2024</p>
+        <p>{dateNow}</p>
         <div className="export-btn">
           <button onClick={exportFile}>
-            {!loading ? <p>Export</p> : <Loader />}
+            {!loading ? <p>Export</p> : <Loader bgColor='white'/>}
           </button>
         </div>
       </div>

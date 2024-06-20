@@ -23,12 +23,12 @@ requestInstance.interceptors.request.use(
 requestInstance.interceptors.response.use(
   (res) => {
     console.log("This is the Response:", res);
-    const data = res.data;
+    const data = res;
     return data;
   },
   (err) => {
     console.log("this is the errors:", err);
-    return Promise.reject(err);
+    return err.response;
   }
 );
 

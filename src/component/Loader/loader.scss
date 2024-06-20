@@ -21,6 +21,18 @@
     animation-delay: 1s;
   }
 }
+.loaderBlack {
+  &::after,
+  &::before {
+    border: 2px solid #000;
+  }
+}
+.loaderWhite {
+  &::after,
+  &::before {
+    border: 2px solid #fff;
+  }
+}
 @keyframes animloader {
   0% {
     transform: scale(0);
