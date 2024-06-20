@@ -17,7 +17,7 @@ const Head = () => {
     const id = localStorage.getItem('id')
     myGlobalFunction(id);
   }, []);
-  
+
   useEffect(() => {
     console.log(dtr);
     const completedData = dtr.filter((item) => item.status == "completed");
@@ -213,7 +213,7 @@ const Head = () => {
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `Daily Work Report (iyo) ${dateNow} .xlsx`;
+      a.download = `Daily Work Report (${localStorage.getItem('name')}) ${dateNow} .xlsx`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
