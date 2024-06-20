@@ -16,3 +16,7 @@ export const login = async (params: {}) => {
   const res = await requestInstance.post("/user/login", params);
   return res;
 };
+export const register = async (params: {})=> {
+  const res = await requestInstance.post("/user/register", params)
+  return res; 
+}
