@@ -4,16 +4,18 @@ import { useEffect, useState } from "react";
 import Loader from "../Loader";
 import { useSelector } from "react-redux";
 import { useGlobalFunction } from "../../context/getDTRContext";
+import { useNavigate } from "react-router-dom";
 const Head = () => {
   const [complete, setComplete] = useState<any[]>([]);
   const [ongoing, setOngoing] = useState<any[]>([]);
   const [problems, setProblems] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const {myGlobalFunction} = useGlobalFunction();
-  const dtr = useSelector(state => state.completed.data);
+  const { myGlobalFunction } = useGlobalFunction();
+  const dtr = useSelector((state) => state.completed.data);
+  const navigate = useNavigate(); 
   useEffect(() => {
     myGlobalFunction();
-  }, []); 
+  }, []);
 
   useEffect(() => {
     console.log(dtr);
@@ -33,6 +35,10 @@ const Head = () => {
   }
   if (problems.length == 0) {
     problems.push({ description: "   " });
+  }
+  const logOut = () => {
+    localStorage.clear();
+    navigate('/login')
   }
   const exportFile = async () => {
     setLoading(true);
@@ -221,10 +227,15 @@ const Head = () => {
       <div className="head-title">
         <h1>Daily Report Exporter</h1>
         <p>Jun 5, 2024</p>
+        <div className="export-btn">
+          <button onClick={exportFile}>
+            {!loading ? <p>Export</p> : <Loader />}
+          </button>
+        </div>
       </div>
       <div className="export-btn">
-        <button onClick={exportFile}>
-          {!loading ? <p>Export</p> : <Loader />}
+        <button onClick={logOut}>
+          <p>Bounce na</p>
         </button>
       </div>
     </div>

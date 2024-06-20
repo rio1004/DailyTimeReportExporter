@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { login } from "../../api";
-import { useNavigate } from 'react-router-dom';
-
+import { useNavigate } from "react-router-dom";
+import './login.scss'
 const Login = () => {
   const [user, setUser] = useState<string>(" ");
   const [pass, setPass] = useState<string>(" ");
   const [isErrUser, setIsErrUser] = useState<boolean>(false);
   const [isErrPass, setIsErrPass] = useState<boolean>(false);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const handleUserChange = (e) => {
     setUser(e.target.value);
   };
@@ -16,10 +16,10 @@ const Login = () => {
   };
   const submitLogin = async () => {
     const res = await login({ username: user.trim(), password: pass });
-    if(res.token){
+    if (res.token) {
       localStorage.setItem("token", res.token);
       localStorage.setItem("id", res.id);
-      navigate('/')
+      navigate("/");
     }
   };
   const inputStyle = {
@@ -53,7 +53,7 @@ const Login = () => {
         </p>
         <div className="input-group">
           <input
-            type="text"
+            type="password"
             placeholder="Syempre Kelangan ng Password"
             value={pass}
             onChange={handlePassChange}
@@ -66,7 +66,9 @@ const Login = () => {
         )}
       </div>
       <div className="form-group" style={inputStyle}>
-        <button onClick={submitLogin}>Login</button>
+        <div className="btn">
+          <button onClick={submitLogin}>Login</button>
+        </div>
       </div>
     </div>
   );

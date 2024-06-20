@@ -12,10 +12,11 @@ export const useGlobalFunction = () => {
 
 export const FunctionProvider = ({ children }) => {
   const dispatch = useDispatch();
+  const id = localStorage.getItem('id')
   const myGlobalFunction = async () => {
     try {
-      const res = await getDTR("/DTR");
-      dispatch(addData(res));
+      const res = await getDTR(id);
+      dispatch(addData(res.data));
     } catch (error) {
       console.error("Error fetching DTR:", error);
     }
