@@ -22,23 +22,24 @@ const FormGroup = (props: FormProps) => {
   const {myGlobalFunction} = useGlobalFunction();
   const storeData = useSelector(state => state.completed.data);
   const boxData = storeData.filter(item=> item.status == props.group)
+  const id = localStorage.getItem('id')
+
   const addBoxes = async (data: string) => {
-    const id = localStorage.getItem('id')
     if (!data) {
       setIsErr(true);
       return;
     }
     const res = await postDTR("/DTR", {
-      description: data,
+      desc: data,
       status: props.group,
-      userId: localStorage.getItem('id')
+      userId: id
     });
     myGlobalFunction(id);
     setIsErr(false);
   };
   const removeBox = async (sheesh: number) => {
     const res = await deleteDTR(sheesh);
-    myGlobalFunction()
+    myGlobalFunction(id);
   };
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setInputVal(event.target.value);
