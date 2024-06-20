@@ -12,8 +12,8 @@ export const useGlobalFunction = () => {
 
 export const FunctionProvider = ({ children }) => {
   const dispatch = useDispatch();
-  const id = localStorage.getItem('id')
-  const myGlobalFunction = async () => {
+  
+  const myGlobalFunction = async (id) => {
     try {
       const res = await getDTR(id);
       dispatch(addData(res.data));

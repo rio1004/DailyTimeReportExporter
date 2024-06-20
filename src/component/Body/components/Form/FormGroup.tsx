@@ -23,6 +23,7 @@ const FormGroup = (props: FormProps) => {
   const storeData = useSelector(state => state.completed.data);
   const boxData = storeData.filter(item=> item.status == props.group)
   const addBoxes = async (data: string) => {
+    const id = localStorage.getItem('id')
     if (!data) {
       setIsErr(true);
       return;
@@ -32,7 +33,7 @@ const FormGroup = (props: FormProps) => {
       status: props.group,
       userId: localStorage.getItem('id')
     });
-    myGlobalFunction();
+    myGlobalFunction(id);
     setIsErr(false);
   };
   const removeBox = async (sheesh: number) => {

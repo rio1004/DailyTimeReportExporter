@@ -14,7 +14,8 @@ const Head = () => {
   const dtr = useSelector((state) => state.completed.data);
   const navigate = useNavigate(); 
   useEffect(() => {
-    myGlobalFunction();
+    const id = localStorage.getItem('id')
+    myGlobalFunction(id);
   }, []);
 
   useEffect(() => {
