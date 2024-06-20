@@ -19,6 +19,7 @@ const Login = () => {
     if (res.token) {
       localStorage.setItem("token", res.token);
       localStorage.setItem("id", res.id);
+      localStorage.setItem("name", res.data.fullName); 
       navigate("/");
     }
   };

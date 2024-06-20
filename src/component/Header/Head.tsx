@@ -17,7 +17,7 @@ const Head = () => {
     const id = localStorage.getItem('id')
     myGlobalFunction(id);
   }, []);
-
+  
   useEffect(() => {
     console.log(dtr);
     const completedData = dtr.filter((item) => item.status == "completed");
@@ -66,10 +66,12 @@ const Head = () => {
       const cell12 = worksheet?.getCell("B" + 9);
       const cellA9 = worksheet?.getCell("A9");
       const cellB8 = worksheet?.getCell("B8");
+      const cellC4 = worksheet?.getCell("C4"); 
       const titleStyle = cellB8?.style;
       const grayStyle = cellA9.style;
       const initialStyle = cell12.style;
       cellC7.value = dateNow;
+      cellC4.value=localStorage.getItem("name")
       let completeInitialNumb: number = 9;
       const merges = worksheet.model.merges;
 
