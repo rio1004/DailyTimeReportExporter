@@ -17,3 +17,4 @@ dist/
 # Logs
 *.log
 package-lock.json
+yarn.lock
