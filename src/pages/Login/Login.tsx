@@ -3,7 +3,7 @@ import { login } from "../../api";
 import { useNavigate } from "react-router-dom";
 import "./login.scss";
 import Loader from "../../component/Loader/index";
-import { Bounce, toast } from "react-toastify";
+import { Bounce, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const Login = () => {
   const [user, setUser] = useState<string>("");
@@ -35,7 +35,8 @@ const Login = () => {
     const res = await login({ username: user.trim(), password: pass });
     if (res.status != 200) {
       setIsLoading(false);
-      toast.error("🦄 Wow so easy!", {
+      console.log(res);
+      toast.error(res.data.message, {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -47,72 +48,79 @@ const Login = () => {
         transition: Bounce,
       });
     }
-    if (res.token) {
-      localStorage.setItem("token", res.token);
-      localStorage.setItem("id", res.id);
-      localStorage.setItem("name", res.data.fullName);
-      navigate("/");
-    }
+    localStorage.setItem("token", res.data.token);
+    localStorage.setItem("id", res.data.id);
+    localStorage.setItem("name", res.data.fullName);
+    navigate("/");
   };
   const inputStyle = {
     justifyContent: "center",
     alignItems: "center",
   };
   return (
-    <div className="login-container">
-      <h1 style={{ textAlign: "center" }}>Welcome To Daily Report Exporter</h1>
-      <div className="form-group" style={inputStyle}>
-        <p>
-          Username <span>*</span>
-        </p>
-        <div className="input-group">
-          <input
-            type="text"
-            placeholder="Palagay ng Pangalan pls :("
-            value={user}
-            onChange={handleUserChange}
-          />
-        </div>
-        {isErrUser ? (
-          <p className="err">Tanga parang hindi developer! lagyan mo laman!</p>
-        ) : (
-          ""
-        )}
-      </div>
-      <div className="form-group" style={inputStyle}>
-        <p>
-          Password <span>*</span>
-        </p>
-        <div className="input-group">
-          <input
-            type="password"
-            placeholder="Syempre Kelangan ng Password"
-            value={pass}
-            onChange={handlePassChange}
-          />
-        </div>
-        {isErrPass ? (
-          <p className="err">Tanga parang hindi developer! lagyan mo laman!</p>
-        ) : (
-          ""
-        )}
-      </div>
-      <div className="form-group" style={inputStyle}>
-        <div className="btn">
-          <button onClick={submitLogin}>
-            {!isLoading ? <p>Login</p> : <Loader bgColor="black" />}
-          </button>
-          <p
-            style={{
-              fontSize: "12px",
-              marginTop: "12px",
-              cursor: "pointer",
-              textAlign: "center",
-            }}
-            onClick={() => navigate("/register")}
-          >
-            Register ka muna SEB
+    <div className="container">
+      <div className="login-container">
+        <ToastContainer />
+        <h1 style={{ textAlign: "center" }}>
+          Welcome To Daily Report Exporter
+        </h1>
+        <div className="form-group" style={inputStyle}>
+          <p>
+            Username <span>*</span>
           </p>
+          <div className="input-group">
+            <input
+              type="text"
+              placeholder="Palagay ng Pangalan pls :("
+              value={user}
+              onChange={handleUserChange}
+            />
+          </div>
+          {isErrUser ? (
+            <p className="err">
+              Tanga parang hindi developer! lagyan mo laman!
+            </p>
+          ) : (
+            ""
+          )}
+        </div>
+        <div className="form-group" style={inputStyle}>
+          <p>
+            Password <span>*</span>
+          </p>
+          <div className="input-group">
+            <input
+              type="password"
+              placeholder="Syempre Kelangan ng Password"
+              value={pass}
+              onChange={handlePassChange}
+            />
+          </div>
+          {isErrPass ? (
+            <p className="err">
+              Tanga parang hindi developer! lagyan mo laman!
+            </p>
+          ) : (
+            ""
+          )}
+        </div>
+        <div className="form-group" style={inputStyle}>
+          <div className="btn">
+            <button onClick={submitLogin}>
+              {!isLoading ? <p>Login</p> : <Loader bgColor="black" />}
+            </button>
+            <p
+              style={{
+                fontSize: "12px",
+                marginTop: "12px",
+                cursor: "pointer",
+                textAlign: "center",
+              }}
+              onClick={() => navigate("/register")}
+            >
+              Register ka muna SEB
+            </p>
+          </div>
         </div>
       </div>
     </div>
