@@ -17,7 +17,7 @@ const completedSlice = createSlice({
   initialState,
   reducers: {
     addData: (state, action) => {
-      state.data = action.payload;
+      state.data = action.payload.data;
     },
     removeData: (state, action) => {
       const id = action.payload.id;
