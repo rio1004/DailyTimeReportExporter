@@ -27,19 +27,19 @@ const Register = () => {
   const submitRegister = async () => {
     if (!user) {
       setIsErrUser(true);
-      return
+      return;
     }
     if (!pass) {
       setIsErrPass(true);
-      return
+      return;
     }
     if (!lname) {
       setIsFname(true);
-      return
+      return;
     }
     if (!fname) {
       setIsLname(true);
-      return
+      return;
     }
     const params = {
       firstName: fname,
@@ -57,85 +57,102 @@ const Register = () => {
     alignItems: "center",
   };
   return (
-    <div className="login-container">
-      <h1 style={{ textAlign: "center" }}>Welcome To Daily Report Exporter</h1>
-      <div className="form-group" style={inputStyle}>
-        <p>
-          Username <span>*</span>
-        </p>
-        <div className="input-group">
-          <input
-            type="text"
-            placeholder="Palagay ng username pls"
-            value={user}
-            onChange={handleUserChange}
-          />
+    <div className="container">
+      <div className="login-container">
+        <h1 style={{ textAlign: "center", marginBottom:"50px"}}>
+          Welcome To Daily Report Exporter
+        </h1>
+        <div className="form-group" style={inputStyle}>
+          <p>
+            Username <span>*</span>
+          </p>
+          <div className="input-group">
+            <input
+              type="text"
+              placeholder="Palagay ng username pls"
+              value={user}
+              onChange={handleUserChange}
+            />
+          </div>
+          {isErrUser ? (
+            <p className="err">
+              Tanga parang hindi developer! lagyan mo laman!
+            </p>
+          ) : (
+            ""
+          )}
         </div>
-        {isErrUser ? (
-          <p className="err">Tanga parang hindi developer! lagyan mo laman!</p>
-        ) : (
-          ""
-        )}
-      </div>
-      <div className="form-group" style={inputStyle}>
-        <p>
-          Password <span>*</span>
-        </p>
-        <div className="input-group">
-          <input
-            type="password"
-            placeholder="Syempre Kelangan ng Password"
-            value={pass}
-            onChange={handlePassChange}
-          />
+        <div className="form-group" style={inputStyle}>
+          <p>
+            Password <span>*</span>
+          </p>
+          <div className="input-group">
+            <input
+              type="password"
+              placeholder="Syempre Kelangan ng Password"
+              value={pass}
+              onChange={handlePassChange}
+            />
+          </div>
+          {isErrPass ? (
+            <p className="err">
+              Tanga parang hindi developer! lagyan mo laman!
+            </p>
+          ) : (
+            ""
+          )}
         </div>
-        {isErrPass ? (
-          <p className="err">Tanga parang hindi developer! lagyan mo laman!</p>
-        ) : (
-          ""
-        )}
-      </div>
-      <div className="form-group" style={inputStyle}>
-        <p>
-          First Name <span>*</span>
-        </p>
-        <div className="input-group">
-          <input
-            type="text"
-            placeholder="pati First name"
-            value={fname}
-            onChange={handleFnameChange}
-          />
+        <div className="form-group" style={inputStyle}>
+          <p>
+            First Name <span>*</span>
+          </p>
+          <div className="input-group">
+            <input
+              type="text"
+              placeholder="pati First name"
+              value={fname}
+              onChange={handleFnameChange}
+            />
+          </div>
+          {isErrPass ? (
+            <p className="err">
+              Tanga parang hindi developer! lagyan mo laman!
+            </p>
+          ) : (
+            ""
+          )}
         </div>
-        {isErrPass ? (
-          <p className="err">Tanga parang hindi developer! lagyan mo laman!</p>
-        ) : (
-          ""
-        )}
-      </div>
-      <div className="form-group" style={inputStyle}>
-        <p>
-          Last Name <span>*</span>
-        </p>
-        <div className="input-group">
-          <input
-            type="text"
-            placeholder="Sabay mo n rin ang Last Name"
-            value={lname}
-            onChange={handleLnameChange}
-          />
+        <div className="form-group" style={inputStyle}>
+          <p>
+            Last Name <span>*</span>
+          </p>
+          <div className="input-group">
+            <input
+              type="text"
+              placeholder="Sabay mo n rin ang Last Name"
+              value={lname}
+              onChange={handleLnameChange}
+            />
+          </div>
+          {isErrPass ? (
+            <p className="err">
+              Tanga parang hindi developer! lagyan mo laman!
+            </p>
+          ) : (
+            ""
+          )}
         </div>
-        {isErrPass ? (
-          <p className="err">Tanga parang hindi developer! lagyan mo laman!</p>
-        ) : (
-          ""
-        )}
-      </div>
-      <div className="form-group" style={inputStyle}>
-        <div className="btn">
-          <button onClick={submitRegister}>Register</button>
+        <div className="form-group" style={inputStyle}>
+          <div className="btn">
+            <button onClick={submitRegister}>Register</button>
+          </div>
+          <p
+            style={{ fontSize: "12px", marginTop: "12px", cursor: "pointer" }}
+            onClick={() => navigate("/login")}
+          >
+            back to login
+          </p>
         </div>
-        <p style={{fontSize: '12px', marginTop:'12px', cursor:'pointer'}} onClick={()=>navigate('/login')}>back to login</p>
       </div>
     </div>
   );

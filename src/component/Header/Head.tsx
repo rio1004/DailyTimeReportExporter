@@ -10,17 +10,9 @@ const Head = () => {
   const [ongoing, setOngoing] = useState<any[]>([]);
   const [problems, setProblems] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [date, setDate] = useState<string>(); 
-  // const { myGlobalFunction } = useGlobalFunction();
   const dtr = useSelector((state) => state.completed.data);
   const navigate = useNavigate(); 
   const dateNow = new Date().toLocaleDateString("en-US")
-  useEffect(() => {
-    const id = localStorage.getItem('id')
-    setDate(dateNow)
-    // myGlobalFunction(id);
-  }, []);
-
   useEffect(() => {
     console.log(dtr);
     const completedData = dtr.filter((item) => item.status == "completed");
@@ -233,14 +225,14 @@ const Head = () => {
       <div className="head-title">
         <h1>Daily Report Exporter</h1>
         <p>{dateNow}</p>
-        <div className="export-btn">
+        <div className="export-btn" style={{marginTop:'20px'}}>
           <button onClick={exportFile}>
             {!loading ? <p>Export</p> : <Loader bgColor='white'/>}
           </button>
         </div>
       </div>
-      <div className="export-btn">
-        <button onClick={logOut}>
+      <div className="export-btn" >
+        <button onClick={logOut} style={{padding:'10px 40px'}}>
           <p>Bounce na</p>
         </button>
       </div>

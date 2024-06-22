@@ -1,7 +1,6 @@
-import Head from "../../component/Header/Head";
 import "../../App.css";
 import Body from "../../component/Body/Body";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 function App() {
@@ -17,7 +16,6 @@ function App() {
   }, []);
   return (
     <>
-      <Head />
       <Body />
     </>
   );
