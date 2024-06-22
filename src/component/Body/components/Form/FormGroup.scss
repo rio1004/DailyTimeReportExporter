@@ -25,6 +25,20 @@
     .errInput {
       border-color: #c23616;
     }
+    .plus-icons{
+      border: 1px solid #fff;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      margin: 0 10px;
+      transition: 0.3s;
+      &:hover{
+        background-color: #fff;
+        color: #242424;
+      }
+    }
   }
   .err {
     font-size: 12px;

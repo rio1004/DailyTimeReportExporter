@@ -1,12 +1,11 @@
-import { CiSquarePlus } from "react-icons/ci";
+import { FaPlus } from "react-icons/fa6";
 import Box from "../Box/Box";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import "./FormGroup.scss";
-
-import { deleteDTR, getDTR, postDTR } from "../../../../api";
+import { deleteDTR, postDTR } from "../../../../api";
 import { useSelector } from "react-redux";
 import { useGlobalFunction } from "../../../../context/getDTRContext";
-// import Loader from "../../../Loader";
+import Loader from "../../../Loader";
 interface FormProps {
   title: string;
   placeholder: string;
@@ -19,23 +18,26 @@ interface boxObjecs {
 const FormGroup = (props: FormProps) => {
   const [inputVal, setInputVal] = useState<string>("");
   const [isErr, setIsErr] = useState<boolean>(false);
-  const {myGlobalFunction} = useGlobalFunction();
-  const storeData = useSelector(state => state.completed.data);
-  const boxData = storeData.filter(item=> item.status == props.group)
-  const id = localStorage.getItem('id')
+  const { myGlobalFunction } = useGlobalFunction();
+  const storeData = useSelector((state) => state.completed.data);
+  const boxData = storeData.filter((item) => item.status == props.group);
+  const [addLoader, setAddLoader] = useState<boolean>(false);
+  const id = localStorage.getItem("id");
 
   const addBoxes = async (data: string) => {
     if (!data) {
       setIsErr(true);
       return;
     }
+    setAddLoader(true);
     const res = await postDTR("/DTR", {
       desc: data,
       status: props.group,
-      userId: id
+      userId: id,
     });
     myGlobalFunction(id);
     setIsErr(false);
+    setAddLoader(false);
   };
   const removeBox = async (sheesh: number) => {
     const res = await deleteDTR(sheesh);
@@ -55,6 +57,18 @@ const FormGroup = (props: FormProps) => {
       />
     );
   });
+
+  const Add = () => {
+    if (!addLoader) {
+      return (
+        <FaPlus
+          style={{ fontSize: "20px", cursor: "pointer" }}
+          onClick={() => addBoxes(inputVal)}
+        />
+      );
+    }
+    return <Loader bgColor="white" />;
+  };
   return (
     <div className="form-group">
       <p>
@@ -68,10 +82,9 @@ const FormGroup = (props: FormProps) => {
           onChange={handleChange}
           className={isErr ? "errInput" : ""}
         />
-        <CiSquarePlus
-          style={{ fontSize: "50px", cursor: "pointer" }}
-          onClick={() => addBoxes(inputVal)}
-        />
+        <div className="plus-icons">
+          <Add />
+        </div>
       </div>
       {isErr && (
         <p className="err">Tanga parang hindi developer! lagyan mo laman!</p>
