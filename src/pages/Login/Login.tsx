@@ -6,12 +6,14 @@ import Loader from "../../component/Loader/index";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Input from "../../component/InputField/Input";
+import { useGlobalFunction } from "../../context/getDTRContext";
 const Login = () => {
   const [user, setUser] = useState<string>("");
   const [pass, setPass] = useState<string>("");
   const [isErrUser, setIsErrUser] = useState<boolean>(true);
   const [isErrPass, setIsErrPass] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const {myGlobalFunction} = useGlobalFunction(); 
   const navigate = useNavigate();
   const handleUserChange = (e) => {
     if (!e.target.value) {
@@ -53,6 +55,7 @@ const Login = () => {
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("id", res.data.id);
       localStorage.setItem("name", res.data.fullName);
+      myGlobalFunction(res.data.id); 
       navigate("/");
     }
   };

@@ -28,6 +28,9 @@ requestInstance.interceptors.response.use(
   },
   (err) => {
     console.log("this is the errors:", err);
+    if(err.response.status == 401){
+      localStorage.clear();
+    }
     return err.response;
   }
 );
