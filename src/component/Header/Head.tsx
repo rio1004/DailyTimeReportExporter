@@ -3,7 +3,7 @@ import * as ExcelJS from "exceljs";
 import { useEffect, useState } from "react";
 import Loader from "../Loader";
 import { useSelector } from "react-redux";
-// import { useGlobalFunction } from "../../context/getDTRContext";
+import { useGlobalFunction } from "../../context/getDTRContext";
 import { useNavigate } from "react-router-dom";
 const Head = () => {
   const [complete, setComplete] = useState<any[]>([]);
@@ -11,6 +11,10 @@ const Head = () => {
   const [problems, setProblems] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const dtr = useSelector((state) => state.completed.data);
+  const {myGlobalFunction} = useGlobalFunction(); 
+  useEffect(()=>{
+    myGlobalFunction(localStorage.getItem('id')); 
+  },[])
   const navigate = useNavigate(); 
   const dateNow = new Date().toLocaleDateString("en-US")
   useEffect(() => {
