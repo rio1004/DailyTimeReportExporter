@@ -11,7 +11,7 @@ dist/
 .env
 
 # IDE files
-.vscode/
+# .vscode/
 .idea/
 
 # Logs
