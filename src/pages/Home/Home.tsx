@@ -1,24 +1,24 @@
-import "../../App.css";
-import Body from "../../component/Body/Body";
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import '../../App.css'
+import Body from '../../component/Body/Body'
+import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
 
 function App() {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const loader = async () => {
-    const isLoggedIn = !!localStorage.getItem("token");
+    const isLoggedIn = !!localStorage.getItem('token')
     if (!isLoggedIn) {
-      navigate("/login");
+      navigate('/login')
     }
-  };
+  }
   useEffect(() => {
-    loader();
-  }, []);
+    loader()
+  }, [])
   return (
     <>
       <Body />
     </>
-  );
+  )
 }
 
-export default App;
+export default App
